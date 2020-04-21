@@ -495,6 +495,9 @@ class Router {
     // current transition is updated right now.
     // however, current route will only be updated after the transition has
     // been validated.
+    // 当前转换正在更新。
+    // 然而，目前的路线将只会更新后的过渡
+    // 验证。
     this._prevTransition = currentTransition
     this._currentTransition = transition
 
@@ -513,6 +516,7 @@ class Router {
     }
 
     // check global before hook
+    // beforeHooks = this._beforeEachHooks 路由守卫  beforeEach的方法队列
     const beforeHooks = this._beforeEachHooks
     const startTransition = () => {
       transition.start(() => {

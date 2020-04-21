@@ -17,6 +17,9 @@ import {
  * A RouteTransition object manages the pipeline of a
  * router-view switching process. This is also the object
  * passed into user route hooks.
+ * RouteTransition对象 管理A的管道
+  *router-view 切换过程。这也是object
+  *传递给用户路由钩子。
  *
  * @param {Router} router
  * @param {Route} to
@@ -36,6 +39,7 @@ export default class RouteTransition {
 
   /**
    * Abort current transition and return to previous location.
+   * 中止当前的转换并返回到先前的位置。
    */
 
   abort () {
@@ -43,6 +47,8 @@ export default class RouteTransition {
       this.aborted = true
       // if the root path throws an error during validation
       // on initial load, it gets caught in an infinite loop.
+      // 如果根路径在验证期间抛出错误
+      // 在初始负载时，它会陷入无限循环。
       const abortingOnLoad = !this.from.path && this.to.path === '/'
       if (!abortingOnLoad) {
         this.router.replace(this.from.path || '/')
@@ -52,6 +58,7 @@ export default class RouteTransition {
 
   /**
    * Abort current transition and redirect to a new location.
+   * 中止当前转换并重定向到新位置
    *
    * @param {String} path
    */
@@ -72,6 +79,8 @@ export default class RouteTransition {
   /**
    * A router view transition's pipeline can be described as
    * follows, assuming we are transitioning from an existing
+   *  路由器视图转换的管道可以描述如下
+      假设我们正在从一个现有的过渡
    * <router-view> chain [Component A, Component B] to a new
    * chain [Component A, Component C]:
    *
@@ -80,22 +89,24 @@ export default class RouteTransition {
    *  B    C
    *
    * 1. Reusablity phase:
-   *   -> canReuse(A, A)
+   *   -> canReuse(A, A) //验证是否可以重复使用
    *   -> canReuse(B, C)
-   *   -> determine new queues:
-   *      - deactivation: [B]
-   *      - activation: [C]
+   *   -> determine new queues: // 确定新队列
+   *      - deactivation: [B] // 钝化B
+   *      - activation: [C] // 激活A
    *
-   * 2. Validation phase:
+   * 2. Validation phase: //验证阶段
    *   -> canDeactivate(B)
    *   -> canActivate(C)
    *
-   * 3. Activation phase:
+   * 3. Activation phase: //激活阶段
    *   -> deactivate(B)
    *   -> activate(C)
    *
    * Each of these steps can be asynchronous, and any
    * step can potentially abort the transition.
+   * 这些步骤可以是异步的，也可以是任意的
+   * step可能会终止转换。
    *
    * @param {Function} cb
    */
@@ -104,15 +115,21 @@ export default class RouteTransition {
     const transition = this
 
     // determine the queue of views to deactivate
+    // 确定要停用的视图队列
+    // _rootView根视图的实例
     let deactivateQueue = []
     let view = this.router._rootView
     while (view) {
       deactivateQueue.unshift(view)
       view = view.childView
     }
+
+    // 翻转 进行一个slice 是为了深拷贝
     let reverseDeactivateQueue = deactivateQueue.slice().reverse()
 
     // determine the queue of route handlers to activate
+    // 确定要激活的路由处理程序队列
+    // toArray 使他具有 数组方法 || Iterator遍历器
     let activateQueue = this.activateQueue =
       toArray(this.to.matched).map(match => match.handler)
 
@@ -136,9 +153,11 @@ export default class RouteTransition {
           // 3. Activation phase
 
           // Update router current route
+          // 更新路由器当前路由
           transition.router._onTransitionValidated(transition)
 
           // trigger reuse for all reused views
+          // 触发对所有重用视图的重用
           reuseQueue && reuseQueue.forEach(view => reuse(view, transition))
 
           // the root of the chain that needs to be replaced
@@ -158,7 +177,8 @@ export default class RouteTransition {
   /**
    * Asynchronously and sequentially apply a function to a
    * queue.
-   *
+   * 方法异步地并顺序地将函数应用于
+   * 队列。
    * @param {Array} queue
    * @param {Function} fn
    * @param {Function} cb

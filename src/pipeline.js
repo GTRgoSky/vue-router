@@ -99,7 +99,7 @@ export function deactivate (view, transition, next) {
 /**
  * Activate / switch component for a router-view.
  *
- * @param {Directive} view
+ * @param {Directive} view 视图实例
  * @param {Transition} transition
  * @param {Number} depth
  * @param {Function} [cb]
@@ -292,7 +292,8 @@ function loadData (component, transition, hook, cb, cleanup) {
 /**
  * Save the child view for a kept-alive view so that
  * we can restore it when it is switched back to.
- *
+ * *保存一个kept-alive视图的子视图
+    当它被切换回时，我们可以恢复它。
  * @param {Directive} view
  */
 

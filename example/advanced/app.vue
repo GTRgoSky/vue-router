@@ -32,6 +32,9 @@ export default {
     return {
       authenticating: false
     }
+  },
+  methods: {
+    
   }
 }
 </script>
