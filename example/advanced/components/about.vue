@@ -7,3 +7,14 @@
     <p id="anchor">This anchor is for testing anchor scrolling in html5 mode</p>
   </div>
 </template>
+
+<script>
+export default {
+  created() {
+    console.log(123);
+  },
+  beforeDestroy() {
+    console.log(213);
+  }
+}
+</script>
